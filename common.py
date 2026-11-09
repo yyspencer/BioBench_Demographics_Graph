@@ -39,6 +39,14 @@ def _norm_sex(s):
     return "Other"
 
 
+def _parse_age(s):
+    s = s.strip()
+    if not s:
+        return None
+    age = float(s)
+    return None if age < 0 else age
+
+
 def load_participants(path):
     """Read the participant CSV into a list of dicts with typed fields."""
     rows = []
@@ -47,7 +55,9 @@ def load_participants(path):
             rows.append({
                 "id": r["id"].strip(),
                 "sex": _norm_sex(r["sex"]),
-                "age": float(r["age"]),
+                # Negative age (e.g. -1) means the participant chose not to
+                # disclose it; stored as None and left out of age statistics.
+                "age": _parse_age(r["age"]),
                 "height_m": float(r["height_m"]),
                 "mass_kg": float(r["mass_kg"]),
             })

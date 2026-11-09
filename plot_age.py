@@ -15,6 +15,12 @@ BIN_WIDTH = 5
 
 
 def draw(ax, people, bin_width=BIN_WIDTH, title="(a) Age distribution"):
+    # Participants who did not disclose their age (age is None) are left out
+    # of the histogram, mean and rug, and counted in a note instead.
+    undisclosed = sum(p["age"] is None for p in people)
+    people = [p for p in people if p["age"] is not None]
+    if not people:
+        raise ValueError("No participants with a disclosed age")
     ages = np.array([p["age"] for p in people])
     lo = math.floor(ages.min() / bin_width) * bin_width
     hi = math.floor(ages.max() / bin_width) * bin_width + bin_width
@@ -52,6 +58,11 @@ def draw(ax, people, bin_width=BIN_WIDTH, title="(a) Age distribution"):
         ax.plot([p["age"], p["age"]], [-0.03 * ymax, -0.10 * ymax],
                 color=SEX_COLOR[p["sex"]], lw=1.8, solid_capstyle="butt",
                 clip_on=False, zorder=4)
+
+    if undisclosed:
+        ax.text(0.99, 0.99, f"{undisclosed} not disclosed",
+                transform=ax.transAxes, ha="right", va="top", fontsize=8.5,
+                color=TEXT_GRAY, style="italic", zorder=4)
 
     ax.set_xlim(lo - bin_width * 0.3, hi + bin_width * 0.3)
     ax.set_ylim(0, ymax * 1.2)
