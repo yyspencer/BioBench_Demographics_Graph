@@ -20,7 +20,17 @@ def draw(ax, people, bin_width=BIN_WIDTH, title="(a) Age distribution"):
     undisclosed = sum(p["age"] is None for p in people)
     people = [p for p in people if p["age"] is not None]
     if not people:
-        raise ValueError("No participants with a disclosed age")
+        # No ages at all (dataset doesn't report them): keep the panel so
+        # combined figures stay aligned, but just state that.
+        ax.text(0.5, 0.5, f"Age not reported\n({undisclosed} participants)",
+                transform=ax.transAxes, ha="center", va="center",
+                fontsize=10, color=TEXT_GRAY, style="italic")
+        ax.set_xticks([])
+        ax.set_yticks([])
+        ax.set_xlabel("Age (years)")
+        ax.set_ylabel("Participants")
+        ax.set_title(title)
+        return
     ages = np.array([p["age"] for p in people])
     lo = math.floor(ages.min() / bin_width) * bin_width
     hi = math.floor(ages.max() / bin_width) * bin_width + bin_width
