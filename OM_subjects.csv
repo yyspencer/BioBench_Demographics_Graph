@@ -1,0 +1,11 @@
+id,sex,age,height_m,mass_kg,name
+S01,F,20,1.6,53,Subject1
+S02,M,20,1.76,61,Kyle
+S03,M,20,1.72,55,Varad
+S04,M,20,1.8,74,Spencer
+S05,M,40,1.83,93,Abhinav
+S06,M,40,1.74,52,Keaton
+S07,F,40,1.57,50,Qiuyan
+S08,F,40,1.57,55.8,Kelly
+S09,F,40,1.54,54.8,Subject6
+S10,F,40,1.65,83.5,Anu
